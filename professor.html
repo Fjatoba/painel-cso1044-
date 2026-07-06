@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>SOPHIA 2.8 | Perfil Docente</title>
+<link rel="stylesheet" href="assets/sophia.css"/>
+</head>
+<body class="docente">
+<div class="appbar">
+  <div class="appbar-inner">
+    <div class="brand">
+      <div class="logo"></div>
+      <div><strong>SOPHIA 2.8</strong><span>Perfil docente interativo</span></div>
+    </div>
+    <div class="nav-pills">
+      <a href="#auditoria">Auditoria</a>
+      <a href="#resumo">Resumo</a>
+      <a href="#submissoes">Submissões</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#formula">Fórmula</a>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <section class="hero">
+    <div class="hero-stage">
+      <div class="hero-stage-inner">
+        <div>
+          <span class="eyebrow">SOPHIA Docente</span>
+          <h1>Triagem visual, feedback rápido e decisão docente preservada.</h1>
+          <p class="lead">O painel docente agora opera como um centro de comando: filtros, indicadores, auditoria crítica das etapas, modal de detalhes, feedback copiável e nota técnica sugerida sem CASE no MVP.</p>
+          <div class="hero-actions">
+            <a class="button" href="#submissoes">Ver submissões</a>
+            <a class="button ghost" href="#auditoria">Ver auditoria crítica</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>O que mudou nesta fase</h3>
+          <ul>
+            <li>Mais cor, contraste e hierarquia visual.</li>
+            <li>Filtros por status e base.</li>
+            <li>Modal de detalhes por submissão.</li>
+            <li>Auditoria crítica item a item.</li>
+            <li>Feedback formativo mais fácil de copiar.</li>
+          </ul>
+          <div class="hero-mini-grid">
+            <div class="hero-mini"><span>MVP</span><strong>2.3</strong></div>
+            <div class="hero-mini"><span>Nota</span><strong>Técnica</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="panel-grid">
+    <aside class="side-rail">
+      <h3>Mapa docente</h3>
+      <a class="rail-link active" href="#auditoria"><span class="num">1</span><span>Auditoria crítica das fases</span></a>
+      <a class="rail-link" href="#resumo"><span class="num">2</span><span>KPIs e panorama</span></a>
+      <a class="rail-link" href="#submissoes"><span class="num">3</span><span>Submissões filtráveis</span></a>
+      <a class="rail-link" href="#feedback"><span class="num">4</span><span>Feedback sugerido</span></a>
+      <a class="rail-link" href="#formula"><span class="num">5</span><span>Fórmula da nota</span></a>
+      <div class="rail-note">
+        <strong>Uso estratégico</strong>
+        <p class="help">Revise alertas antes de homologar qualquer nota.</p>
+        <div class="progress-track"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="dados" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Fonte de dados</div><h2>Carregar submissões</h2><p class="help">O painel abre com dados de demonstração. Escolha uma das duas formas de carregar dados reais.</p></div>
+          <div class="panel-tag">JSON</div>
+        </div>
+        <div class="panel-body">
+          <div class="grid">
+            <div class="field-group">
+              <h3>Opção A — Carregar do Apps Script</h3>
+              <p class="help">Requer o token docente (configurado uma vez via <code>setDocenteToken()</code> em <code>Setup.gs</code> — nunca fica no código-fonte). O token só fica salvo neste navegador enquanto a aba estiver aberta.</p>
+              <label>URL do Web App</label><input type="url" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec">
+              <label>Token docente</label><input type="password" id="docenteToken" placeholder="cole o token configurado no Apps Script">
+              <div class="hero-actions"><button type="button" id="btnFetch">Carregar dados reais</button></div>
+              <div id="fetchMsg" class="help"></div>
+            </div>
+            <div class="field-group">
+              <h3>Opção B — Colar JSON manualmente</h3>
+              <p class="help">Alternativa sem token: rode <code>exportSubmissoesJSON()</code> no editor do Apps Script e cole o resultado do log abaixo.</p>
+              <textarea id="jsonInput" placeholder="Cole aqui o JSON exportado pelo Apps Script..." style="min-height:90px"></textarea>
+              <div class="hero-actions">
+                <button type="button" id="btnCarregar">Carregar dados colados</button>
+                <button type="button" class="light" id="btnDemo">Usar dados de demonstração</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="auditoria" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Auditoria crítica</div><h2>Checagem das fases anteriores</h2><p class="help">Síntese crítica item por item antes de avançar para integração real.</p></div>
+          <div class="panel-tag">Revisão</div>
+        </div>
+        <div class="panel-body">
+          <div id="auditWrap" class="audit-list"></div>
+        </div>
+      </section>
+
+      <section id="resumo" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Painel 1</div><h2>Resumo operacional</h2><p class="help">Indicadores simulados para testar leitura rápida.</p></div>
+          <div class="panel-tag">KPIs</div>
+        </div>
+        <div class="panel-body">
+          <div id="kpiWrap" class="kpi-grid"></div>
+        </div>
+      </section>
+
+      <section id="submissoes" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Painel 2</div><h2>Submissões e triagem</h2><p class="help">Use os filtros para localizar casos prioritários.</p></div>
+          <div class="panel-tag">Interativo</div>
+        </div>
+        <div class="panel-body">
+          <div class="tabs">
+            <button type="button" class="tab-btn active" data-filter="todos">Todas</button>
+            <button type="button" class="tab-btn" data-filter="validas">Válidas</button>
+            <button type="button" class="tab-btn" data-filter="alertas">Com alertas</button>
+            <button type="button" class="tab-btn" data-filter="Base 1">Base 1</button>
+            <button type="button" class="tab-btn" data-filter="Base 2">Base 2</button>
+            <button type="button" class="tab-btn" data-filter="Base 3">Base 3</button>
+          </div>
+          <div class="tableWrap">
+            <table>
+              <thead>
+                <tr><th>ID</th><th>Base</th><th>Status</th><th>Integrantes</th><th>Checklist</th><th>Alertas</th><th>Nota técnica</th><th>CASE sinalizador</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="submissoesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="feedback" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Painel 3</div><h2>Feedback formativo sugerido</h2><p class="help">Texto editável, pensado para reduzir seu tempo de devolutiva individualizada.</p></div>
+          <div class="panel-tag">Copiável</div>
+        </div>
+        <div class="panel-body">
+          <div class="inline-note warn"><div>⚠️</div><div><strong>Revisão docente necessária</strong><p>A devolutiva é gerada por regras. Revise antes de enviar.</p></div></div>
+          <pre id="feedbackPreview" class="feedback-box"></pre>
+          <div class="actions">
+            <button onclick="navigator.clipboard.writeText(document.getElementById('feedbackPreview').textContent)">Copiar feedback</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="formula" class="panel">
+        <div class="panel-header">
+          <div><div class="kicker">Painel 4</div><h2>Fórmula da nota técnica</h2><p class="help">Composição transparente da nota sugerida no MVP.</p></div>
+          <div class="panel-tag">Sem CASE</div>
+        </div>
+        <div class="panel-body">
+          <div class="tableWrap">
+            <table>
+              <thead><tr><th>Dimensão</th><th>Peso</th><th>Como pontuar no MVP</th></tr></thead>
+              <tbody>
+                <tr><td>Checklist e completude</td><td>1,0</td><td>proporção de itens marcados</td></tr>
+                <tr><td>Normalidade e LOG10</td><td>1,5</td><td>campos obrigatórios, descrição técnica e análise sociológica</td></tr>
+                <tr><td>Comparação de médias (T/ANOVA)</td><td>1,5</td><td>procedimento, grupos, p-valor, descrição técnica e análise sociológica</td></tr>
+                <tr><td>Associação entre variáveis</td><td>1,0</td><td>técnica correta para a base (χ²/Pearson/tau-b), descrição técnica e análise sociológica</td></tr>
+                <tr><td>Regressão logística</td><td>2,0</td><td>VD binária, evento=1, OR, p-valor, descrição técnica e análise sociológica</td></tr>
+                <tr><td>Pergunta, hipótese e limites</td><td>1,0</td><td>presença e coerência</td></tr>
+                <tr><td>Clareza geral</td><td>1,0</td><td>todos os blocos com descrição técnica e análise sociológica preenchidas</td></tr>
+                <tr><td>Outputs rastreáveis</td><td>1,0</td><td>output do Jamovi + docx anexados (ou link do Drive como alternativa)</td></tr>
+                <tr><td><strong>Total</strong></td><td><strong>10,0</strong></td><td>—</td></tr>
+              </tbody>
+            </table>
+            <div class="inline-note">
+              <div>ℹ️</div>
+              <div><strong>Identificação não pontua</strong><p>O status de identidade (nome cotejado com a turma) não soma nem subtrai da nota técnica — identificar-se corretamente é uma condição básica da entrega, não um mérito avaliável. Ele continua visível na aba <code>integrantes</code> e na devolutiva, apenas como sinalização para sua revisão.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="footer">SOPHIA 2.8 Docente — painel interativo sofisticado.</div>
+</div>
+
+<div id="detailModal" class="modal-backdrop" onclick="if(event.target.id==='detailModal') closeDetail()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><div class="kicker">Detalhes da submissão</div><h2 id="modalTitle"></h2></div>
+      <button class="light" onclick="closeDetail()">Fechar</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<script src="assets/professor.js"></script>
+</body>
+</html>
