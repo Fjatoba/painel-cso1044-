@@ -83,6 +83,7 @@
               <p class="help">Requer o token docente (configurado uma vez via <code>setDocenteToken()</code> em <code>Setup.gs</code> — nunca fica no código-fonte). O token só fica salvo neste navegador enquanto a aba estiver aberta.</p>
               <label>URL do Web App</label><input type="url" id="webAppUrl" placeholder="https://script.google.com/macros/s/.../exec">
               <label>Token docente</label><input type="password" id="docenteToken" placeholder="cole o token configurado no Apps Script">
+              <label class="check-card"><input type="checkbox" id="lembrarToken"><div><strong>Lembrar neste navegador</strong><span>Não marque em computador compartilhado ou público — o token fica salvo neste dispositivo até você desmarcar ou limpar os dados do navegador.</span></div></label>
               <div class="hero-actions"><button type="button" id="btnFetch">Carregar dados reais</button></div>
               <div id="fetchMsg" class="help"></div>
             </div>

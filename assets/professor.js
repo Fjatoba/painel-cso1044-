@@ -173,20 +173,36 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Opção A — carregamento automático via endpoint protegido por token.
-  // URL e token ficam apenas em sessionStorage (somem ao fechar a aba);
-  // nunca são gravados em localStorage nem em nenhum arquivo do projeto.
+  // A URL do Web App NÃO é segredo (já está pública no repositório discente,
+  // em assets/flow-core.js) — por isso vem pré-preenchida aqui, para não
+  // precisar colar toda vez. O TOKEN é o segredo de verdade: por padrão
+  // fica só em sessionStorage (some ao fechar a aba); se a caixa "lembrar
+  // neste navegador" for marcada, passa a ficar em localStorage (persiste
+  // entre sessões, só neste computador/navegador — não marque em
+  // computador compartilhado ou público).
+  const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzRYqsYnId4-vUJT6QPo7gqgX_8U6GCIvCuEzBx4FspaCuHwHD8WR8ikYAF8XJ28Xf7/exec";
   const urlField = document.getElementById("webAppUrl");
   const tokenField = document.getElementById("docenteToken");
-  urlField.value = sessionStorage.getItem("sophia_webapp_url") || "";
-  tokenField.value = sessionStorage.getItem("sophia_docente_token") || "";
+  const lembrarField = document.getElementById("lembrarToken");
+  urlField.value = sessionStorage.getItem("sophia_webapp_url") || localStorage.getItem("sophia_webapp_url") || DEFAULT_WEB_APP_URL;
+  const tokenSalvo = localStorage.getItem("sophia_docente_token") || sessionStorage.getItem("sophia_docente_token") || "";
+  tokenField.value = tokenSalvo;
+  if(lembrarField) lembrarField.checked = !!localStorage.getItem("sophia_docente_token");
 
   document.getElementById("btnFetch").addEventListener("click", async () => {
     const url = urlField.value.trim();
     const token = tokenField.value.trim();
     const msg = document.getElementById("fetchMsg");
     if(!url || !token){ msg.textContent = "Preencha a URL do Web App e o token docente."; return; }
-    sessionStorage.setItem("sophia_webapp_url", url);
-    sessionStorage.setItem("sophia_docente_token", token);
+    if(lembrarField && lembrarField.checked){
+      localStorage.setItem("sophia_webapp_url", url);
+      localStorage.setItem("sophia_docente_token", token);
+      sessionStorage.removeItem("sophia_webapp_url"); sessionStorage.removeItem("sophia_docente_token");
+    } else {
+      sessionStorage.setItem("sophia_webapp_url", url);
+      sessionStorage.setItem("sophia_docente_token", token);
+      localStorage.removeItem("sophia_webapp_url"); localStorage.removeItem("sophia_docente_token");
+    }
     msg.textContent = "Carregando...";
     try{
       const res = await fetch(`${url}?action=export&token=${encodeURIComponent(token)}`);
